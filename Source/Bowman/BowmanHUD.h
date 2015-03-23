@@ -18,5 +18,9 @@ private:
 	/** Crosshair asset pointer */
 	class UTexture2D* CrosshairTex;
 
+	class UTexture2D* WeaponTex;
+
+ 	class UTexture2D* AmmoTex;
+
 };
 

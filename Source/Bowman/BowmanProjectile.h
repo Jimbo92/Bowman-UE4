@@ -19,6 +19,8 @@ class ABowmanProjectile : public AActor
 	UPROPERTY(VisibleAnywhere, Category = Projectile)
 	class UPointLightComponent* FireLightComp;
 
+	
+
 	UPROPERTY(VisibleAnywhere, Category = Projectile)
 	class UParticleSystemComponent* FireParticleComp;
 
@@ -41,8 +43,16 @@ public:
 
 	void		SetFireArrow();
 
+	void		Tick(float DeltaTime);
+
 //Vars
 	UParticleSystem* FireParticle;
+
+private:
+
+	float			rgb[3];
+	
+
 	
 
 };

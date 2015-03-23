@@ -8,6 +8,8 @@
 ABowmanProjectile::ABowmanProjectile(const FObjectInitializer& ObjectInitializer) 
 	: Super(ObjectInitializer)
 {
+	PrimaryActorTick.bCanEverTick = false;
+
 	// Use a sphere as a simple collision representation
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	CollisionComp->InitSphereRadius(5.0f);
@@ -29,8 +31,8 @@ ABowmanProjectile::ABowmanProjectile(const FObjectInitializer& ObjectInitializer
 
 	//FireLight
 	FireLightComp = ObjectInitializer.CreateDefaultSubobject<UPointLightComponent>(this, "FireLightComp");
-	FireLightComp->Intensity = 500.0f;
-	FireLightComp->LightColor = FColor::FColor(255,128,0);
+	FireLightComp->SetIntensity(256.0f);
+	FireLightComp->LightColor = FColor::FColor(255, 128, 0);
 	FireLightComp->SetVisibility(false, true);
 	FireLightComp->AttachTo(RootComponent);
 
@@ -83,4 +85,9 @@ void ABowmanProjectile::SetSpeed(const float& speed)
 	{
 		ProjectileMovement->InitialSpeed = speed;
 	}
+}
+
+void ABowmanProjectile::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
 }

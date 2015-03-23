@@ -23,7 +23,6 @@ ABowmanCharacter::ABowmanCharacter(const FObjectInitializer& ObjectInitializer)
 
 	CharacterMovement->NavAgentProps.bCanCrouch = true;
 
-
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
@@ -50,6 +49,7 @@ ABowmanCharacter::ABowmanCharacter(const FObjectInitializer& ObjectInitializer)
 	LightComp->SetLightColor(FColor::FColor(255, 145, 0));
 	LightComp->AttachParent = FirstPersonCameraComponent;
 	LightComp->SetIntensity(m_fLanternIntensity);
+	LightComp->SetVisibility(false, true);
 
 	// Note: The ProjectileClass and the skeletal mesh/anim blueprints for Mesh1P are set in the
 	// derived blueprint asset named MyCharacter (to avoid direct content references in C++)
@@ -100,7 +100,7 @@ void ABowmanCharacter::SetupPlayerInputComponent(class UInputComponent* InputCom
 
 void ABowmanCharacter::Crouching()
 {
-	if (CharacterMovement)
+	if (ACharacter::CharacterMovement)
 	{
 		ACharacter::Crouch();
 	}
@@ -108,7 +108,7 @@ void ABowmanCharacter::Crouching()
 
 void ABowmanCharacter::StopCrouching()
 {
-	if (CharacterMovement)
+	if (ACharacter::CharacterMovement)
 	{
 		ACharacter::UnCrouch();
 	}

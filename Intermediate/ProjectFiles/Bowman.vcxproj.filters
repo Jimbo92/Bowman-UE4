@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<None Include="..\..\Bowman.uproject" />
+		<Filter Include="Source">
+			<UniqueIdentifier>{84BDA5B5-8A67-4DDD-BF7C-F446E8E3FA5F}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Source\Bowman.Target.cs">
+			<Filter>Source</Filter>
+		</None >
+		<None Include="..\..\Source\BowmanEditor.Target.cs">
+			<Filter>Source</Filter>
+		</None >
+		<Filter Include="Config">
+			<UniqueIdentifier>{675D0273-1940-45AF-A816-340796217702}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Config\DefaultEditor.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultEditorUserSettings.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultEngine.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultGame.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultInput.ini">
+			<Filter>Config</Filter>
+		</None >
+		<Filter Include="Source\Bowman">
+			<UniqueIdentifier>{8D7D1F71-71AE-4563-A0A6-64314B8E682B}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Source\Bowman\Bowman.Build.cs">
+			<Filter>Source\Bowman</Filter>
+		</None >
+		<ClCompile Include="..\..\Source\Bowman\Bowman.cpp">
+			<Filter>Source\Bowman</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\Bowman\Bowman.h">
+			<Filter>Source\Bowman</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\Bowman\BowmanCharacter.cpp">
+			<Filter>Source\Bowman</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\Bowman\BowmanCharacter.h">
+			<Filter>Source\Bowman</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\Bowman\BowmanGameMode.cpp">
+			<Filter>Source\Bowman</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\Bowman\BowmanGameMode.h">
+			<Filter>Source\Bowman</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\Bowman\BowmanHUD.cpp">
+			<Filter>Source\Bowman</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\Bowman\BowmanHUD.h">
+			<Filter>Source\Bowman</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\Bowman\BowmanProjectile.cpp">
+			<Filter>Source\Bowman</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\Bowman\BowmanProjectile.h">
+			<Filter>Source\Bowman</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\Bowman\DayNightCycle.cpp">
+			<Filter>Source\Bowman</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\Bowman\DayNightCycle.h">
+			<Filter>Source\Bowman</Filter>
+		</ClInclude >
+		<Filter Include="Source\Bowman\Resources">
+			<UniqueIdentifier>{944806BE-B1A7-4CD5-B683-95AA263FD360}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="Source\Bowman\Resources\Windows">
+			<UniqueIdentifier>{29CBA8F9-6C0B-4E4A-8921-74FF0A415489}</UniqueIdentifier>
+		</Filter>
+		<ResourceCompile Include="..\..\Source\Bowman\Resources\Windows\Bowman.rc">
+			<Filter>Source\Bowman\Resources\Windows</Filter>
+		</ResourceCompile >
+	</ItemGroup>
+</Project>

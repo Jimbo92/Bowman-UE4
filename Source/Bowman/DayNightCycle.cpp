@@ -51,7 +51,8 @@ void ADayNightCycle::Tick( float DeltaTime )
 		TODCurrent = TODChecker;
 	}
 
-	m_fCycleSpeed = CVarDayNightCycleSpeed.GetValueOnGameThread();
+	if (m_fCycleSpeed != CVarDayNightCycleSpeed.GetValueOnGameThread())
+		m_fCycleSpeed = CVarDayNightCycleSpeed.GetValueOnGameThread();
 
 	//Toggle night or day
 	if (m_fSunPitch >= 360)

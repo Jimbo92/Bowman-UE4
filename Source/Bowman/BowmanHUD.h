@@ -20,7 +20,8 @@ private:
 
 	class UTexture2D* WeaponTex;
 
- 	class UTexture2D* AmmoTex;
+ 	class UTexture2D* RegularArrowTex;
+	class UTexture2D* FlameArrowTex;
 
 };
 

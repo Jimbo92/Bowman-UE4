@@ -11,6 +11,8 @@ class ABowmanCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+	const int MAX_WEAPON_LIMIT = 2;
+
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
 	UPROPERTY(VisibleDefaultsOnly, Category=Mesh)
 	class USkeletalMeshComponent* Mesh1P;
@@ -58,10 +60,13 @@ public:
 
 	void		Lantern();
 
+	bool		m_bisFireArrow;
+
 private:
 
+	int			WeaponList[MAX_WEAPON_LIMIT];
+
 	bool		m_bBowDrawing;
-	bool		m_bisFireArrow;
 	float		m_fArrowSpeed;
 
 	bool		m_bisLanternOn;

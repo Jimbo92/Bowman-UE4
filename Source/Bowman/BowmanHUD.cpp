@@ -5,8 +5,7 @@
 #include "Engine/Canvas.h"
 #include "TextureResource.h"
 #include "CanvasItem.h"
-
-
+#include "BowmanCharacter.h"
 
 ABowmanHUD::ABowmanHUD(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -19,13 +18,16 @@ ABowmanHUD::ABowmanHUD(const FObjectInitializer& ObjectInitializer) : Super(Obje
 
 	static ConstructorHelpers::FObjectFinder<UTexture2D> AmmoRegularTexObj(TEXT("/Game/FirstPerson/Textures/HudArrowRegularTex"));
 	static ConstructorHelpers::FObjectFinder<UTexture2D> AmmoFlameTexObj(TEXT("/Game/FirstPerson/Textures/HudArrowFlameTex"));
-	AmmoTex = AmmoFlameTexObj.Object;
+	FlameArrowTex = AmmoFlameTexObj.Object;
+	RegularArrowTex = AmmoRegularTexObj.Object;
 }
 
 
 void ABowmanHUD::DrawHUD()
 {
 	Super::DrawHUD();
+
+	ABowmanCharacter* Character = Cast<ABowmanCharacter>(GetOwningPawn());
 
 	// Draw very simple crosshair
 
@@ -49,9 +51,18 @@ void ABowmanHUD::DrawHUD()
 	Canvas->DrawItem(WeaponTileItem);
 
 	//Draw the Ammo Hud Item
-	const FVector2D AmmoDrawPosition(Canvas->ClipX * 0.95f - AmmoTex->GetSurfaceWidth() * 0.5f, Canvas->ClipY * 0.9f - AmmoTex->GetSurfaceHeight() * 0.5f);
+//	if (Character->m_bisFireArrow)
+//#define AmmoTex FlameArrowTex
+//	else
+//#define AmmoTex RegularArrowTex
 
-	FCanvasTileItem AmmoTileItem(AmmoDrawPosition, AmmoTex->Resource, FLinearColor::White);
+#define AMMO_TEX (Character->m_bisFireArrow ? FlameArrowTex : RegularArrowTex)
+
+	const FVector2D AmmoDrawPosition(Canvas->ClipX * 0.95f - AMMO_TEX->GetSurfaceWidth() * 0.5f, Canvas->ClipY * 0.9f - AMMO_TEX->GetSurfaceHeight() * 0.5f);
+
+	FCanvasTileItem AmmoTileItem(AmmoDrawPosition, AMMO_TEX->Resource, FLinearColor::White);
 	AmmoTileItem.BlendMode = SE_BLEND_Translucent;
 	Canvas->DrawItem(AmmoTileItem);
+
+#undef AMMO_TEX
 }

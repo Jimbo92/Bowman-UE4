@@ -14,6 +14,13 @@ DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 ABowmanCharacter::ABowmanCharacter(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
+	//init weapon list
+	for (int i = 0; i < MAX_WEAPON_LIMIT; i++)
+	{
+		WeaponList[i] = i;
+	}
+
+
 	//init Vars
 	m_bisFireArrow = false;
 	m_bBowDrawing = false;
@@ -118,12 +125,12 @@ void ABowmanCharacter::ArrowToggle()
 {
 	if (!m_bisFireArrow)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Yellow, FString::FString("Fire Arrows"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Yellow, FString::FString("Fire Arrows"));
 		m_bisFireArrow = true;
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Yellow, FString::FString("Regular Arrows"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Yellow, FString::FString("Regular Arrows"));
 		m_bisFireArrow = false;
 	}
 }

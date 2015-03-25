@@ -18,10 +18,14 @@ private:
 	/** Crosshair asset pointer */
 	class UTexture2D* CrosshairTex;
 
-	class UTexture2D* WeaponTex;
+	class UTexture2D* BowWeaponTex;
+	class UTexture2D* SwordWeaponTex;
 
  	class UTexture2D* RegularArrowTex;
 	class UTexture2D* FlameArrowTex;
+
+	class UTexture2D* TempWeaponTex;
+	class UTexture2D* TempAmmoTex;
 
 };
 

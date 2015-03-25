@@ -13,13 +13,17 @@ ABowmanHUD::ABowmanHUD(const FObjectInitializer& ObjectInitializer) : Super(Obje
 	static ConstructorHelpers::FObjectFinder<UTexture2D> CrosshiarTexObj(TEXT("/Game/FirstPerson/Textures/FirstPersonCrosshair"));
 	CrosshairTex = CrosshiarTexObj.Object;
 
-	static ConstructorHelpers::FObjectFinder<UTexture2D> WeaponTexObj(TEXT("/Game/FirstPerson/Textures/BowHudText"));
-	WeaponTex = WeaponTexObj.Object;
+	static ConstructorHelpers::FObjectFinder<UTexture2D> WeaponBowTexObj(TEXT("/Game/FirstPerson/Textures/HudBowText.HudBowText"));
+	static ConstructorHelpers::FObjectFinder<UTexture2D> WeaponSwordTexObj(TEXT("/Game/FirstPerson/Textures/HudSwordText.HudSwordText"));
+	BowWeaponTex = WeaponBowTexObj.Object;
+	SwordWeaponTex = WeaponSwordTexObj.Object;
 
 	static ConstructorHelpers::FObjectFinder<UTexture2D> AmmoRegularTexObj(TEXT("/Game/FirstPerson/Textures/HudArrowRegularTex"));
 	static ConstructorHelpers::FObjectFinder<UTexture2D> AmmoFlameTexObj(TEXT("/Game/FirstPerson/Textures/HudArrowFlameTex"));
 	FlameArrowTex = AmmoFlameTexObj.Object;
 	RegularArrowTex = AmmoRegularTexObj.Object;
+
+
 }
 
 
@@ -43,26 +47,40 @@ void ABowmanHUD::DrawHUD()
 	TileItem.BlendMode = SE_BLEND_Translucent;
 	Canvas->DrawItem( TileItem );
 
-	//Draw the Weapon Hud Item
-	const FVector2D WeaponDrawPosition(Canvas->ClipX * 0.9f - WeaponTex->GetSurfaceWidth() * 0.5f, Canvas->ClipY * 0.9f - WeaponTex->GetSurfaceHeight() * 0.5f);
+	if (Character->WeaponIndex == 0)
+	{
+		TempWeaponTex = BowWeaponTex;
+	}
+	else if (Character->WeaponIndex == 1)
+	{
+		TempWeaponTex = SwordWeaponTex;
+	}
 
-	FCanvasTileItem WeaponTileItem(WeaponDrawPosition, WeaponTex->Resource, FLinearColor::White);
+	if (Character->m_bisFireArrow)
+	{
+		TempAmmoTex = FlameArrowTex;
+	}
+	else
+	{
+		TempAmmoTex = RegularArrowTex;
+	}
+
+	//Draw the Weapon Hud Item
+	const FVector2D WeaponDrawPosition(Canvas->ClipX * 0.9f - TempWeaponTex->GetSurfaceWidth() * 0.5f, Canvas->ClipY * 0.9f - TempWeaponTex->GetSurfaceHeight() * 0.5f);
+
+	FCanvasTileItem WeaponTileItem(WeaponDrawPosition, TempWeaponTex->Resource, FLinearColor::White);
 	WeaponTileItem.BlendMode = SE_BLEND_Translucent;
 	Canvas->DrawItem(WeaponTileItem);
 
-	//Draw the Ammo Hud Item
-//	if (Character->m_bisFireArrow)
-//#define AmmoTex FlameArrowTex
-//	else
-//#define AmmoTex RegularArrowTex
 
-#define AMMO_TEX (Character->m_bisFireArrow ? FlameArrowTex : RegularArrowTex)
+	//Draw Ammo Hud Item
+	if (Character->WeaponIndex == 0)
+	{
+		const FVector2D AmmoDrawPosition(Canvas->ClipX * 0.95f - TempAmmoTex->GetSurfaceWidth() * 0.5f, Canvas->ClipY * 0.9f - TempAmmoTex->GetSurfaceHeight() * 0.5f);
 
-	const FVector2D AmmoDrawPosition(Canvas->ClipX * 0.95f - AMMO_TEX->GetSurfaceWidth() * 0.5f, Canvas->ClipY * 0.9f - AMMO_TEX->GetSurfaceHeight() * 0.5f);
+		FCanvasTileItem AmmoTileItem(AmmoDrawPosition, TempAmmoTex->Resource, FLinearColor::White);
+		AmmoTileItem.BlendMode = SE_BLEND_Translucent;
+		Canvas->DrawItem(AmmoTileItem);
+	}
 
-	FCanvasTileItem AmmoTileItem(AmmoDrawPosition, AMMO_TEX->Resource, FLinearColor::White);
-	AmmoTileItem.BlendMode = SE_BLEND_Translucent;
-	Canvas->DrawItem(AmmoTileItem);
-
-#undef AMMO_TEX
 }

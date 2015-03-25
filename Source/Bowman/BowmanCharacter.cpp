@@ -14,12 +14,6 @@ DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 ABowmanCharacter::ABowmanCharacter(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	//init weapon list
-	for (int i = 0; i < MAX_WEAPON_LIMIT; i++)
-	{
-		WeaponList[i] = i;
-	}
-
 
 	//init Vars
 	m_bisFireArrow = false;
@@ -27,6 +21,8 @@ ABowmanCharacter::ABowmanCharacter(const FObjectInitializer& ObjectInitializer)
 	m_fArrowSpeed = 0.0f;
 	m_bisLanternOn = false;
 	m_fLanternIntensity = 1500.0f;
+
+	WeaponIndex = 0;
 
 	CharacterMovement->NavAgentProps.bCanCrouch = true;
 
@@ -58,6 +54,8 @@ ABowmanCharacter::ABowmanCharacter(const FObjectInitializer& ObjectInitializer)
 	LightComp->SetIntensity(m_fLanternIntensity);
 	LightComp->SetVisibility(false, true);
 
+
+
 	// Note: The ProjectileClass and the skeletal mesh/anim blueprints for Mesh1P are set in the
 	// derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
@@ -80,20 +78,23 @@ void ABowmanCharacter::SetupPlayerInputComponent(class UInputComponent* InputCom
 	InputComponent->BindAction("Crouch", IE_Pressed, this, &ABowmanCharacter::Crouching);
 	InputComponent->BindAction("Crouch", IE_Released, this, &ABowmanCharacter::StopCrouching);
 
-	
-	//InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &ABowmanCharacter::TouchStarted);
-	if( EnableTouchscreenMovement(InputComponent) == false )
-	{
-		InputComponent->BindAction("Fire", IE_Pressed, this, &ABowmanCharacter::BowDrawBack);
-		InputComponent->BindAction("Fire", IE_Released, this, &ABowmanCharacter::OnFire);
-	}
+	//Player Attack
+	InputComponent->BindAction("Primary Attack", IE_Pressed, this, &ABowmanCharacter::PrimaryAttack);
+	InputComponent->BindAction("Primary Attack", IE_Released, this, &ABowmanCharacter::PrimaryAttackOnRelease);
+	InputComponent->BindAction("Secondary Attack", IE_Pressed, this, &ABowmanCharacter::SecondaryAttack);
+	InputComponent->BindAction("Secondary Attack", IE_Released, this, &ABowmanCharacter::SecondaryAttackOnRelease);
+
+	//Player Weapon Slots
+	InputComponent->BindAction("Equipt Primary", IE_Pressed, this, &ABowmanCharacter::PrimaryWeapon);
+	InputComponent->BindAction("Equipt Secondary", IE_Pressed, this, &ABowmanCharacter::SecondaryWeapon);
+
 
 	InputComponent->BindAction("ArrowSwitch", IE_Pressed, this, &ABowmanCharacter::ArrowToggle);
 
 	InputComponent->BindAction("LanternToggle", IE_Pressed, this, &ABowmanCharacter::Lantern);
-	
 
-	
+
+
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
 	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
@@ -103,6 +104,78 @@ void ABowmanCharacter::SetupPlayerInputComponent(class UInputComponent* InputCom
 	InputComponent->BindAxis("LookUpRate", this, &ABowmanCharacter::LookUpAtRate);
 
 	InputComponent->BindAction("QuitGame", IE_Released, this, &ABowmanCharacter::QuickQuit);
+}
+
+void ABowmanCharacter::PrimaryWeapon()
+{
+	WeaponIndex = 0;
+}
+void ABowmanCharacter::SecondaryWeapon()
+{
+	WeaponIndex = 1;
+}
+
+//Primary Attack Function
+void ABowmanCharacter::PrimaryAttack()
+{
+	switch (WeaponIndex)
+	{
+	case 0:
+	{
+		BowDrawBack();
+	}
+		break;
+	case 1:
+	{
+		SwordSwing();
+	}
+		break;
+
+
+	default:
+		break;
+	}
+}
+//PA On Release
+void ABowmanCharacter::PrimaryAttackOnRelease()
+{
+	switch (WeaponIndex)
+	{
+	case 0:
+	{
+		OnFire();
+	}
+		break;
+	case 1:
+	{
+
+	}
+		break;
+
+
+	default:
+		break;
+	}
+}
+//Secondary Attack Function
+void ABowmanCharacter::SecondaryAttack()
+{
+
+}
+//SA On Release
+void ABowmanCharacter::SecondaryAttackOnRelease()
+{
+
+}
+
+void ABowmanCharacter::SwordSwing()
+{
+
+}
+
+void ABowmanCharacter::SwordBlock()
+{
+
 }
 
 void ABowmanCharacter::Crouching()
@@ -146,23 +219,11 @@ void ABowmanCharacter::Lantern()
 	{
 		m_bisLanternOn = false;
 	}
-
-
-
 }
 
 void ABowmanCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	//Smooth crouch
-	if (bIsCrouched)
-	{
-		if (CharacterMovement)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Red, FString::SanitizeFloat(ACharacter::CrouchedEyeHeight));
-		}
-	}
 
 	//Lantern Light Intensity Tick
 	if (m_bisLanternOn && m_fLanternIntensity < 1500.0f)
@@ -172,7 +233,7 @@ void ABowmanCharacter::Tick(float DeltaTime)
 			LightComp->SetVisibility(true, true);
 			LightComp->SetActive(true, true);
 		}
-	
+
 		m_fLanternIntensity += 5000.0f * DeltaTime;
 
 		LightComp->SetIntensity(m_fLanternIntensity);
@@ -184,7 +245,7 @@ void ABowmanCharacter::Tick(float DeltaTime)
 			LightComp->SetVisibility(false, true);
 			LightComp->SetActive(false, true);
 		}
-	
+
 		m_fLanternIntensity -= 4500.0f * DeltaTime;
 
 		LightComp->SetIntensity(m_fLanternIntensity);
@@ -206,7 +267,7 @@ void ABowmanCharacter::BowDrawBack()
 }
 
 void ABowmanCharacter::OnFire()
-{ 
+{
 	//Release
 	m_bBowDrawing = false;
 
@@ -215,19 +276,17 @@ void ABowmanCharacter::OnFire()
 	if (ProjectileClass != NULL)
 	{
 		const FRotator SpawnRotation = GetControlRotation();
-		// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-		const FVector SpawnLocation = GetActorLocation() + SpawnRotation.RotateVector(GunOffset);
 
 		UWorld* const World = GetWorld();
 		if (World != NULL)
-		{	
+		{
 
 			ABowmanProjectile* Arrow = World->SpawnActor<ABowmanProjectile>(ProjectileClass, Mesh1P->GetSocketLocation("Muzzle"), SpawnRotation);
 
 			if (Arrow)
-			{	
+			{
 				FVector velocity = Arrow->GetVelocity() * m_fArrowSpeed;
-				
+
 				Arrow->SetVelocity(velocity);
 
 				if (m_bisFireArrow)
@@ -243,11 +302,11 @@ void ABowmanCharacter::OnFire()
 	}
 
 	// try and play a firing animation if specified
-	if(FireAnimation != NULL)
+	if (FireAnimation != NULL)
 	{
 		// Get the animation object for the arms mesh
 		UAnimInstance* AnimInstance = Mesh1P->GetAnimInstance();
-		if(AnimInstance != NULL)
+		if (AnimInstance != NULL)
 		{
 			AnimInstance->Montage_Play(FireAnimation, 1.f);
 		}
@@ -257,7 +316,7 @@ void ABowmanCharacter::OnFire()
 
 void ABowmanCharacter::BeginTouch(const ETouchIndex::Type FingerIndex, const FVector Location)
 {
-	if( TouchItem.bIsPressed == true )
+	if (TouchItem.bIsPressed == true)
 	{
 		return;
 	}
@@ -273,7 +332,7 @@ void ABowmanCharacter::EndTouch(const ETouchIndex::Type FingerIndex, const FVect
 	{
 		return;
 	}
-	if( ( FingerIndex == TouchItem.FingerIndex ) && (TouchItem.bMoved == false) )
+	if ((FingerIndex == TouchItem.FingerIndex) && (TouchItem.bMoved == false))
 	{
 		OnFire();
 	}
@@ -282,7 +341,7 @@ void ABowmanCharacter::EndTouch(const ETouchIndex::Type FingerIndex, const FVect
 
 void ABowmanCharacter::TouchUpdate(const ETouchIndex::Type FingerIndex, const FVector Location)
 {
-	if ((TouchItem.bIsPressed == true) && ( TouchItem.FingerIndex==FingerIndex))
+	if ((TouchItem.bIsPressed == true) && (TouchItem.FingerIndex == FingerIndex))
 	{
 		if (TouchItem.bIsPressed)
 		{
@@ -294,7 +353,7 @@ void ABowmanCharacter::TouchUpdate(const ETouchIndex::Type FingerIndex, const FV
 					FVector MoveDelta = Location - TouchItem.Location;
 					FVector2D ScreenSize;
 					ViewportClient->GetViewportSize(ScreenSize);
-					FVector2D ScaledDelta = FVector2D( MoveDelta.X, MoveDelta.Y) / ScreenSize;									
+					FVector2D ScaledDelta = FVector2D(MoveDelta.X, MoveDelta.Y) / ScreenSize;
 					if (ScaledDelta.X != 0.0f)
 					{
 						TouchItem.bMoved = true;
@@ -348,14 +407,14 @@ void ABowmanCharacter::LookUpAtRate(float Rate)
 bool ABowmanCharacter::EnableTouchscreenMovement(class UInputComponent* InputComponent)
 {
 	bool bResult = false;
-	if(FPlatformMisc::GetUseVirtualJoysticks() || GetDefault<UInputSettings>()->bUseMouseForTouch )
+	if (FPlatformMisc::GetUseVirtualJoysticks() || GetDefault<UInputSettings>()->bUseMouseForTouch)
 	{
 		bResult = true;
 		InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &ABowmanCharacter::BeginTouch);
 		InputComponent->BindTouch(EInputEvent::IE_Released, this, &ABowmanCharacter::EndTouch);
 		InputComponent->BindTouch(EInputEvent::IE_Repeat, this, &ABowmanCharacter::TouchUpdate);
 	}
-	
+
 	return bResult;
 }
 

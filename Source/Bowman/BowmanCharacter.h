@@ -11,8 +11,6 @@ class ABowmanCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-	const int MAX_WEAPON_LIMIT = 2;
-
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
 	UPROPERTY(VisibleDefaultsOnly, Category=Mesh)
 	class USkeletalMeshComponent* Mesh1P;
@@ -54,7 +52,6 @@ public:
 	void		StopCrouching();
 
 	void		QuickQuit();
-	void		BowDrawBack();
 
 	UGameViewportClient* Viewport;
 
@@ -62,9 +59,24 @@ public:
 
 	bool		m_bisFireArrow;
 
+	//Player Attacks
+	void		PrimaryAttack();
+	void		PrimaryAttackOnRelease();
+	void		SecondaryAttack();
+	void		SecondaryAttackOnRelease();
+
+	//Index of weapons
+	int			WeaponIndex;
+
 private:
 
-	int			WeaponList[MAX_WEAPON_LIMIT];
+	void		PrimaryWeapon();
+	void		SecondaryWeapon();
+
+	void		SwordSwing();
+	void		SwordBlock();
+
+	void		BowDrawBack();
 
 	bool		m_bBowDrawing;
 	float		m_fArrowSpeed;

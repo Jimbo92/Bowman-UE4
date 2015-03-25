@@ -48,12 +48,6 @@ public:
 //Vars
 	UParticleSystem* FireParticle;
 
-private:
-
-	float			rgb[3];
-	
-
-	
 
 };
 
